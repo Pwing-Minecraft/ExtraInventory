@@ -1,5 +1,5 @@
 # ExtraInventory
-Rewrite of the ExtraInventory plugin by Nemesis213. Backwards compatible with the old version.
+Rewrite of the [ExtraInventory](https://dev.bukkit.org/projects/extra-inventory) plugin by Nemesis213 with backwards compability.
 
 # Usage
 ## Commands:
