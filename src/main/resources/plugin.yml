@@ -1,0 +1,27 @@
+name: ExtraInventory
+main: net.pwing.extrainventory.ExtraInventoryPlugin
+version: 2.0
+api-version: 1.13
+authors: [Nemesis213, Redned]
+description: Rewrite of the ExtraInventory plugin by Nemesis213. Backwards compatible with the old version.
+commands:
+  inv:
+    description: Open your extra inventory.
+    usage: /inv
+permissions:
+  extraInventory.use:
+    description: Allows you to open an extra inventory. Must have a slot permission too.
+    extraInventory.rows.1:
+      description: Gives access to an extra inventory with 1 row (9 slots).
+    extraInventory.rows.2:
+      description: Gives access to an extra inventory with 2 rows (18 slots).
+    extraInventory.rows.3:
+      description: Gives access to an extra inventory with 3 rows (27 slots).
+    extraInventory.rows.4:
+      description: Gives access to an extra inventory with 4 rows (36 slots).
+    extraInventory.rows.5:
+      description: Gives access to an extra inventory with 5 rows (45 slots).
+    extraInventory.rows.6:
+      description: Gives access to an extra inventory with 6 rows (54 slots).
+    extraInventory.spy:
+      description: Allows mods or admin to open other player's extra inventory with /inv spy <player name>.
