@@ -14,6 +14,10 @@ import java.util.Optional;
 
 public class ExtraInventoryUtil {
 
+    /**
+     * @deprecated updated to new storage format
+     */
+    @Deprecated
     public static String toBase64(int size, ItemStack[] contents) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         BukkitObjectOutputStream objectStream = new BukkitObjectOutputStream(outputStream);
@@ -26,15 +30,22 @@ public class ExtraInventoryUtil {
         return Base64Coder.encodeLines(outputStream.toByteArray());
     }
 
+    /**
+     * @deprecated updated to new storage format
+     */
+    @Deprecated
     public static Optional<Inventory> fromBase64(String base64) throws ClassNotFoundException, IOException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
         BukkitObjectInputStream objectStream = new BukkitObjectInputStream(inputStream);
         int slots = objectStream.readInt();
-        if (slots < 9) {
-            return Optional.empty();
-        }
+        // if (slots < 9) {
+        //     return Optional.empty();
+        // }
         Inventory inventory = Bukkit.createInventory(null, slots);
         for (int i = 0; i < slots; i++) {
+            if (inputStream.available() == 0) {
+                break;
+            }
             inventory.setItem(i, (ItemStack) objectStream.readObject());
         }
         inputStream.close();

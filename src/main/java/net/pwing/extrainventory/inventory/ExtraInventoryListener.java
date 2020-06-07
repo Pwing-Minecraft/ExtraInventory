@@ -6,8 +6,8 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
@@ -47,35 +47,31 @@ public class ExtraInventoryListener implements Listener {
         }
 
         HumanEntity human = event.getPlayer();
+        boolean spying = this.plugin.inventoryManager().spying(human.getUniqueId());
         ExtraInventory extraInventory = this.plugin.inventoryManager().loadedInventories().get(human.getUniqueId());
-        if (extraInventory == null) {
+        if (!spying && extraInventory != null) {
+            this.plugin.inventoryManager().refresh((Player) human);
+            extraInventory.contents(event.getView().getTopInventory().getContents());
             return;
         }
 
         Inventory inventory = this.plugin.inventoryManager().cachedInventories().get(human.getUniqueId());
-        if (inventory == null || !event.getInventory().equals(inventory)) {
+        if (!spying || inventory == null || !event.getView().getTopInventory().equals(inventory)) {
             return;
         }
-
-        boolean spying = this.plugin.inventoryManager().spying(human.getUniqueId());
-        if (!spying) {
-            extraInventory.contents(inventory.getContents());
-            this.plugin.inventoryManager().refresh((Player) human);
-        } else {
-            this.plugin.inventoryManager().spying().remove(human.getUniqueId());
-        }
+        this.plugin.inventoryManager().spying().remove(human.getUniqueId());
         this.plugin.inventoryManager().cachedInventories().remove(human.getUniqueId());
     }
 
     @EventHandler
-    public void onInteract(InventoryInteractEvent event) {
+    public void onInteract(InventoryClickEvent event) {
         if (!event.getView().getTitle().equals("Extra Inventory")) {
             return;
         }
 
         HumanEntity human = event.getWhoClicked();
         Inventory inventory = this.plugin.inventoryManager().cachedInventories().get(human.getUniqueId());
-        if (inventory == null || !event.getInventory().equals(inventory)) {
+        if (inventory == null || !event.getView().getTopInventory().equals(inventory)) {
             return;
         }
         boolean spying = this.plugin.inventoryManager().spying(human.getUniqueId());
